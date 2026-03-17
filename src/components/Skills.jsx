@@ -10,7 +10,7 @@ const skillsData = [
 
 const Skills = () => {
     return (
-        <section className="py-24">
+        <section id="skills" className="py-24">
             <div className="text-center mb-16">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}

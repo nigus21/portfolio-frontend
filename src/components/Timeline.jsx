@@ -39,7 +39,7 @@ const Timeline = () => {
     ];
 
     return (
-        <section className="py-24 relative">
+        <section id="experience" className="py-24 relative">
             <div className="text-center mb-20">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}

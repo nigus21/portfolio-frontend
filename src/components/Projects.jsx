@@ -45,7 +45,7 @@ const Projects = () => {
     );
 
     return (
-        <section className="py-24">
+        <section id="projects" className="py-24">
             <div className="text-center mb-16">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
@@ -66,8 +66,8 @@ const Projects = () => {
                         key={cat}
                         onClick={() => setFilter(cat)}
                         className={`px-6 py-3 rounded-full text-sm font-bold transition-all shadow-sm ${filter === cat
-                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white scale-105 shadow-[0_4px_15px_rgba(139,92,246,0.3)]'
-                                : 'bg-white text-slate-600 hover:text-purple-600 hover:bg-purple-50'
+                            ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white scale-105 shadow-[0_4px_15px_rgba(139,92,246,0.3)]'
+                            : 'bg-white text-slate-600 hover:text-purple-600 hover:bg-purple-50'
                             }`}
                     >
                         {cat}
@@ -87,8 +87,8 @@ const Projects = () => {
                             key={project.title}
                             whileHover={{ y: -10 }}
                             className={`p-8 glass rounded-3xl relative group border transition-all duration-300 ${project.featured
-                                    ? 'border-purple-300 shadow-purple-500/10 shadow-xl overflow-hidden'
-                                    : 'border-white hover:border-blue-200 hover:shadow-xl'
+                                ? 'border-purple-300 shadow-purple-500/10 shadow-xl overflow-hidden'
+                                : 'border-white hover:border-blue-200 hover:shadow-xl'
                                 }`}
                         >
                             {project.featured && (
