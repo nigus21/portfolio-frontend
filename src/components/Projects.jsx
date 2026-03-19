@@ -1,43 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { projectData } from '../data/projects';
 
-const projectData = [
-    {
-        title: 'Student Hub',
-        category: 'Full Stack & AI',
-        description: 'Platform where students access exams/answers. Includes an AI system converting documents (PDF/DOC) into questions with AI explanations.',
-        tech: ['Next.js', 'FastAPI', 'AI OCR'],
-        featured: true,
-    },
-    {
-        title: 'Insurance Risk Analytics',
-        category: 'Data Science',
-        description: 'Built predictive models for insurance claims. Performed EDA, hypothesis testing, and loss analysis.',
-        tech: ['Python', 'CI/CD', 'Git', 'DVC'],
-    },
-    {
-        title: 'Intelligent Complaint Analysis',
-        category: 'AI',
-        description: 'AI system that analyzes customer complaints to extract insights for financial services business decision-making.',
-        tech: ['Machine Learning', 'NLP'],
-    },
-    {
-        title: 'RAG-Based Customer Feedback Chatbot',
-        category: 'AI',
-        description: 'Converts customer feedback into actionable insights using Retrieval-Augmented Generation.',
-        tech: ['RAG', 'LLMs', 'Vector DB'],
-    },
-    {
-        title: 'IT Salary Survey Analysis (EU)',
-        category: 'Data Science',
-        description: 'Analyzed salary trends, gender gaps, and influencing factors. Created data visualizations.',
-        tech: ['Python', 'Pandas', 'Data Viz'],
-    },
-];
 
 const categories = ['All', 'Full Stack & AI', 'Data Science', 'AI'];
 
 const Projects = () => {
+    const navigate = useNavigate();
     const [filter, setFilter] = useState('All');
 
     const filteredProjects = projectData.filter(
@@ -48,6 +18,8 @@ const Projects = () => {
         <section id="projects" className="py-24">
             <div className="text-center mb-16">
                 <motion.h2
+                    onClick={() => navigate(`/projects/${project.slug}`)}
+                    className="cursor-pointer"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
