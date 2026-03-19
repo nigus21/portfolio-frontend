@@ -30,5 +30,4 @@ Thumbs.db
 .env.*.local
 
 # npm package locks
-package-lock.json
 yarn.lock

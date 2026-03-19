@@ -1,120 +1,219 @@
-import React from 'react';
+// src/components/Hero.jsx
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FileDown, Github, Linkedin, Sparkles } from 'lucide-react';
 
 const Hero = () => {
-    const openChat = () => {
-        window.dispatchEvent(new CustomEvent('openChat'));
+  const canvasRef = useRef(null);
+
+  const openChat = () => {
+    window.dispatchEvent(new CustomEvent('openChat'));
+  };
+
+  const letterVariant = {
+    initial: { y: 100, opacity: 0 },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: { type: 'spring', damping: 12, stiffness: 100 },
+    },
+  };
+
+  const containerVariant = {
+    animate: { transition: { staggerChildren: 0.05 } },
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animationFrameId;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
-    return (
-        <section id="home" className="relative min-h-[90vh] flex flex-col items-center justify-center text-center pt-20">
-            <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, staggerChildren: 0.15 }}
-                className="space-y-8 w-full max-w-4xl mx-auto flex flex-col items-center"
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 0.4 - 0.2;
+        this.speedY = Math.random() * 0.4 - 0.2;
+        this.opacity = Math.random() * 0.5 + 0.1;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x > canvas.width) this.x = 0;
+        else if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        else if (this.y < 0) this.y = canvas.height;
+      }
+      draw() {
+        ctx.fillStyle = `rgba(148, 163, 184, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const init = () => {
+      particles = [];
+      const count = window.innerWidth < 768 ? 50 : 150;
+      for (let i = 0; i < count; i++) particles.push(new Particle());
+    };
+
+    const connect = () => {
+      const maxDistance = 180;
+      for (let a = 0; a < particles.length; a++) {
+        for (let b = a; b < particles.length; b++) {
+          const dx = particles[a].x - particles[b].x;
+          const dy = particles[a].y - particles[b].y;
+          const distance = Math.hypot(dx, dy);
+          if (distance < maxDistance) {
+            ctx.strokeStyle = `rgba(59, 130, 246, ${0.12 * (1 - distance / maxDistance)})`;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    };
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        p.update();
+        p.draw();
+      });
+      connect();
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    const handleResize = () => {
+      resize();
+      init();
+    };
+
+    window.addEventListener('resize', handleResize);
+    resize();
+    init();
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+    <section
+      id="home"
+      className="relative min-h-[90vh] flex flex-col items-center justify-center text-center overflow-hidden section-transparent"
+    >
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0" />
+
+      <div className="relative z-10 w-full max-w-5xl px-4 sm:px-6 py-16 sm:py-20 flex flex-col items-center">
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 glass-light px-4 sm:px-6 py-2 rounded-full text-[9px] sm:text-[10px] md:text-xs font-black tracking-[0.25em] text-slate-500 dark:text-slate-300 uppercase flex items-center gap-3"
+        >
+          <span className="flex h-2 w-2 relative">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          </span>
+          Available for AI-Driven Web Engineering
+        </motion.div>
+
+        <motion.div
+          variants={containerVariant}
+          initial="initial"
+          animate="animate"
+          className="flex flex-col items-center leading-[0.85]"
+        >
+          <h1 className="text-[14vw] md:text-[9vw] lg:text-[7.5vw] font-black tracking-tighter text-slate-900 dark:text-slate-50 flex overflow-hidden">
+            {'NIGUS'.split('').map((l, i) => (
+              <motion.span key={i} variants={letterVariant}>
+                {l}
+              </motion.span>
+            ))}
+          </h1>
+          <h1 className="text-[14vw] md:text-[9vw] lg:text-[7.5vw] font-black tracking-tighter text-gradient flex overflow-hidden">
+            {'DIBEKULU'.split('').map((l, i) => (
+              <motion.span key={i} variants={letterVariant}>
+                {l}
+              </motion.span>
+            ))}
+          </h1>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9 }}
+          className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 flex flex-col items-center"
+        >
+          <p className="text-sm sm:text-base md:text-lg font-mono font-bold text-slate-500 dark:text-slate-300 tracking-tight">
+            &lt;Fullstack_Developer /&gt; + [AI_Engineer]
+          </p>
+
+          <p className="max-w-2xl text-slate-500 dark:text-slate-300 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
+            I design and ship intelligent, production-grade web systems — blending high-performance engineering with
+            immersive product experiences from Addis Ababa, Ethiopia.
+          </p>
+        </motion.div>
+
+        <div className="mt-10 sm:mt-12 flex flex-col items-center gap-6 w-full">
+          <motion.button
+            whileHover={{ scale: 1.03, y: -3 }}
+            whileTap={{ scale: 0.97, y: 1 }}
+            onClick={openChat}
+            className="glass bg-slate-900/90 dark:bg-slate-50/80 text-slate-50 dark:text-slate-900 px-8 sm:px-12 py-4 sm:py-5 rounded-3xl font-black text-sm sm:text-lg md:text-xl shadow-2xl flex items-center gap-3 sm:gap-4 group"
+          >
+            INTERROGATE_MY_AI
+          </motion.button>
+
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm">
+            <motion.a
+              whileHover={{ y: -3 }}
+              href="https://drive.google.com/file/d/1na7QsGTs5MU5pBjz9jWgANfgOiSHbVWq/view?usp=sharing"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-bold hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
             >
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, type: 'spring', bounce: 0.5 }}
-                    className="inline-flex items-center space-x-2 bg-white/80 backdrop-blur-md text-pink-600 px-6 py-2.5 rounded-full shadow-[0_4px_20px_rgba(236,72,153,0.15)] border border-pink-100 text-sm font-bold tracking-wide"
-                >
-                    <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
-                    </span>
-                    <span>Open to new opportunities</span>
-                </motion.div>
-
-                <motion.h1
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-slate-900 leading-[1.1]"
-                >
-                    Hi, I’m Nigus Dibekulu
-                    <br />
-                    <span className="text-gradient">— AI & Software Engineer</span>
-                </motion.h1>
-
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="text-2xl md:text-3xl text-slate-600 font-bold"
-                >
-                    Ask my AI assistant about me!
-                </motion.h2>
-
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="max-w-2xl text-slate-500 text-lg md:text-xl leading-relaxed font-medium"
-                >
-                    Transforming ideas into intelligent, scalable web applications. Blending modern web frameworks with advanced AI capabilities natively from Addis Ababa, Ethiopia.
-                </motion.p>
-
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                    className="flex flex-col items-center gap-6 pt-8 w-full z-10"
-                >
-                    {/* Main CTA */}
-                    <div className="flex flex-col items-center gap-3">
-                        <motion.button
-                            whileHover={{ scale: 1.05, y: -5 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={openChat}
-                            className="relative group flex items-center space-x-3 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white px-10 py-5 rounded-full font-bold text-xl md:text-2xl shadow-[0_10px_40px_rgba(236,72,153,0.5)] hover:shadow-[0_15px_50px_rgba(139,92,246,0.6)] transition-all duration-300 overflow-hidden"
-                        >
-                            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-                            <Sparkles className="w-7 h-7 animate-pulse text-yellow-200" />
-                            <span className="relative z-10 tracking-wide">🚀 Talk to AI About Nigus</span>
-                        </motion.button>
-                    </div>
-
-                    <div className="flex flex-row items-center gap-4 mt-2">
-                        <motion.a
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
-                            href="/resume.pdf"
-                            target="_blank"
-                            className="flex items-center space-x-2 bg-white text-slate-800 border-2 border-slate-100 px-8 py-3.5 rounded-2xl font-bold shadow-lg shadow-blue-500/5 hover:shadow-blue-500/10 hover:border-blue-200 transition-all text-lg"
-                        >
-                            <FileDown className="w-5 h-5 text-blue-500" />
-                            <span>Download CV</span>
-                        </motion.a>
-
-                        <div className="flex items-center gap-3">
-                            <motion.a whileHover={{ y: -3 }} href="https://github.com" target="_blank" rel="noreferrer" className="p-4 bg-white border border-slate-100 rounded-2xl text-slate-600 hover:text-purple-600 shadow-md hover:shadow-xl hover:border-purple-200 transition-all">
-                                <Github className="w-6 h-6" />
-                            </motion.a>
-                            <motion.a whileHover={{ y: -3 }} href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-4 bg-white border border-slate-100 rounded-2xl text-slate-600 hover:text-blue-600 shadow-md hover:shadow-xl hover:border-blue-200 transition-all">
-                                <Linkedin className="w-6 h-6" />
-                            </motion.a>
-                        </div>
-                    </div>
-                </motion.div>
-
-            </motion.div>
-
-            {/* Floating decorative elements */}
-            <motion.div
-                animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-1/4 left-10 md:left-20 w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full blur-xl opacity-60 pointer-events-none"
-            />
-            <motion.div
-                animate={{ y: [0, 20, 0], scale: [1, 1.1, 1] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute bottom-1/4 right-10 md:right-20 w-24 h-24 bg-gradient-to-tr from-pink-400 to-purple-400 rounded-full blur-2xl opacity-50 pointer-events-none"
-            />
-        </section>
-    );
+              <FileDown size={18} />
+              <span>RESUME.PDF</span>
+            </motion.a>
+            <span className="w-px h-5 bg-slate-200 dark:bg-slate-700" />
+            <motion.a
+              whileHover={{ y: -3 }}
+              href="https://github.com/nigus21"
+              target="_blank"
+              rel="noreferrer"
+              className="text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-slate-100"
+            >
+              <Github size={20} />
+            </motion.a>
+            <motion.a
+              whileHover={{ y: -3 }}
+              href="https://www.linkedin.com/in/nigus-dibekulu-208b49253/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400"
+            >
+              <Linkedin size={20} />
+            </motion.a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default Hero;

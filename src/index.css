@@ -4,12 +4,16 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased overflow-x-hidden;
+    @apply bg-slate-50 text-slate-900 antialiased overflow-x-hidden dark:bg-[#050505] dark:text-slate-100;
   }
 }
 
 .glass {
-  @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl;
+  @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl dark:bg-slate-900/70 dark:border-slate-800/80;
+}
+
+.glass-dark {
+  @apply bg-slate-950/90 backdrop-blur-2xl border border-slate-800/80 shadow-[0_24px_80px_rgba(0,0,0,0.7)];
 }
 
 /* Custom scrollbar */
@@ -42,6 +46,22 @@
   animation: gradient 15s ease infinite;
 }
 
+.animate-blob {
+  animation: blob 18s ease-in-out infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-3000 {
+  animation-delay: 3s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -54,4 +74,37 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  25% {
+    transform: translate3d(8%, -6%, 0) scale(1.1);
+  }
+  50% {
+    transform: translate3d(-6%, 4%, 0) scale(0.95);
+  }
+  75% {
+    transform: translate3d(4%, 8%, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Add this to allow the background blobs to be visible through components */
+.section-transparent {
+  background: transparent !important;
+}
+
+/* Optional: Make the glass effect more "Airy" */
+.glass-light {
+  @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-none;
+}
+
+/* Remove the "Box" constraint from your main containers */
+.main-content-fluid {
+  @apply w-full max-w-none px-0;
 }
