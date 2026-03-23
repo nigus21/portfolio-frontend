@@ -63,7 +63,7 @@ function App() {
           <Route path="/projects/:slug" element={<ProjectDetails />} />
         </Routes>
 
-        <footer className="mt-20 border-t border-slate-200/40 dark:border-slate-800/60 py-8 text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 glass-light">
+        <footer className="border-t border-slate-200/40 dark:border-slate-800/60 py-8 text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 glass-light">
           <p className="font-medium">
             © {new Date().getFullYear()} Nigus Dibekulu · Crafted with React, Framer Motion & AI.
           </p>
