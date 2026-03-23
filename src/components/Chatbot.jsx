@@ -32,9 +32,8 @@ const Chatbot = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
-  const chatEndpoint =
-    import.meta.env.VITE_CHAT_ENDPOINT ||
-    (import.meta.env.DEV ? 'http://localhost:8000/chat' : '');
+const chatEndpoint =
+  import.meta.env.VITE_CHAT_ENDPOINT || 'http://localhost:8000/chat';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
