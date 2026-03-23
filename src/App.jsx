@@ -48,7 +48,10 @@ function App() {
           <Route
             path="/"
             element={
-              <main className="pt-24 md:pt-28 pb-16 md:pb-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 md:space-y-32 main-content-fluid">
+              <main
+                className="relative pt-24 md:pt-28 pb-16 md:pb-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 md:space-y-32 main-content-fluid"
+                style={{ overflowX: 'hidden' }}
+              >
                 <Hero />
                 <Projects />
                 <Timeline />

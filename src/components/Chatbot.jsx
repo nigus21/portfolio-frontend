@@ -32,6 +32,9 @@ const Chatbot = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const chatEndpoint =
+    import.meta.env.VITE_CHAT_ENDPOINT ||
+    (import.meta.env.DEV ? 'http://localhost:8000/chat' : '');
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -57,14 +60,44 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/chat', {
+      if (!chatEndpoint) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            text: 'Chat backend is not configured for production. Set `VITE_CHAT_ENDPOINT` and redeploy.',
+          },
+        ]);
+        return;
+      }
+
+      const response = await fetch(chatEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage }),
+        redirect: 'manual',
       });
 
-      const data = await response.json();
-      setMessages((prev) => [...prev, { role: 'assistant', text: data.response }]);
+      const contentType = response.headers.get('content-type') || '';
+      if (!response.ok) {
+        throw new Error(`Backend error (${response.status})`);
+      }
+
+      if (contentType.includes('application/json')) {
+        const data = await response.json();
+        setMessages((prev) => [...prev, { role: 'assistant', text: data.response }]);
+      } else {
+        const text = await response.text();
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            text: `Unexpected backend response (expected JSON).`,
+          },
+        ]);
+        // eslint-disable-next-line no-console
+        console.warn(text);
+      }
     } catch {
       setMessages((prev) => [
         ...prev,

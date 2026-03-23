@@ -9,6 +9,7 @@ export default {
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
             },
+            
             animation: {
                 'blob': 'blob 10s infinite',
                 'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -27,7 +28,8 @@ export default {
                     '66%': { transform: 'translate(-30px, 30px) scale(0.9)' },
                     '100%': { transform: 'translate(0px, 0px) scale(1)' },
                 }
-            }
+            },
+            
         },
     },
     plugins: [],

@@ -1,6 +1,6 @@
 export const projectData = [
     {
-        title: 'Ethiopian National Exam Resource Platform',
+        title: 'National Exam Resource Platform',
         slug: 'student-hub',
         category: 'Full Stack & AI',
         description: 'AI-powered exam ecosystem that converts static Ethiopian national exam papers into interactive, auto-graded mock exams with analytics for students and administrators.',
@@ -21,8 +21,8 @@ export const projectData = [
             AI: ['Google Gemini Pro', 'OpenAI GPT-4o', 'Prompt Engineering'],
             Infra: ['SMTP', 'JWT Auth', 'Asyncio/Threading'],
         },
-        tech: ['Next.js', 'Tailwind CSS', 'FastAPI', 'PostgreSQL', 'Gemini / GPT-4o'],
-        url: '#', // TODO: replace with live deployment URL
+        tech: ['Next.js', 'FastAPI', 'PostgreSQL', 'GPT-4o'],
+        url: 'https://ethioexamhub-frontend-getw.vercel.app/login', // TODO: replace with live deployment URL
         featured: true,
     },
     {
@@ -31,6 +31,7 @@ export const projectData = [
         category: 'Data Science',
         description: 'Built predictive models for insurance claims. Performed EDA, hypothesis testing, and loss analysis.',
         tech: ['Python', 'CI/CD', 'Git', 'DVC'],
+        url: 'https://github.com/nigus21/Insurance-risk-analytics', // TODO: replace with live deployment URL
     },
     {
         title: 'Consumer Complaint Intelligence System (RAG)',
@@ -56,7 +57,7 @@ export const projectData = [
             DevOps: ['Git', 'Batch Processing Scripts', 'Windows ML Deployment'],
         },
         tech: ['RAG', 'ChromaDB', 'Flan-T5', 'Sentence-Transformers'],
-        url: '#', // TODO: replace with live demo or internal video URL
+        url: 'https://github.com/nigus21/Rag-Complaint-Analysis', // TODO: replace with live demo or internal video URL
     },
     {
         title: 'RAG-Based Customer Feedback Chatbot',

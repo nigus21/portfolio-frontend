@@ -22,7 +22,7 @@ export default function ProjectDetails() {
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="min-h-screen pb-16 bg-slate-50 dark:bg-[#050505]"
+      className="min-h-screen pb-16 bg-slate-50 dark:bg-[#131129] pt-20"
     >
       {/* Header band */}
       <section className="relative overflow-hidden border-b border-slate-200/40 dark:border-slate-800/70">
@@ -83,42 +83,38 @@ export default function ProjectDetails() {
             </p>
           </div>
 
-          <aside className="glass bg-white/80 dark:bg-slate-900/90 rounded-3xl p-5 sm:p-6 border border-white/60 dark:border-slate-800/80">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400 mb-3">
-              Project Meta
-            </h3>
-            <dl className="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
-              <div>
-                <dt className="uppercase text-[10px] tracking-[0.2em] text-slate-400">Category</dt>
-                <dd className="font-semibold">{project.category}</dd>
-              </div>
-              <div>
-                <dt className="uppercase text-[10px] tracking-[0.2em] text-slate-400">Timeline</dt>
-                <dd className="font-semibold">2026</dd>
-              </div>
-              {project.role && (
-                <div>
-                  <dt className="uppercase text-[10px] tracking-[0.2em] text-slate-400">Role</dt>
-                  <dd className="font-semibold">{project.role}</dd>
-                </div>
-              )}
-            </dl>
+          <div>
+  <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-50 mb-4">
+    What this solves
+  </h2>
+
+  <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+    {(project.architecturePoints || [project.description])
+      .slice(0, 3)
+      .map((point) => (
+        <li key={point} className="flex gap-2">
+          <span className="text-blue-500">•</span>
+          <span>{point}</span>
+        </li>
+      ))}
+  </ul>
+
             {project.url && (
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 text-slate-50 text-xs sm:text-sm font-semibold py-3 hover:bg-blue-600 transition-colors"
-              >
-                Open Live System
-              </a>
+             <a
+             href={project.url}
+             target="_blank"
+             rel="noreferrer"
+             className="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-semibold py-3 hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(99,102,241,0.6)] transition-all duration-300"
+           >
+            View Live 
+           </a>
             )}
-          </aside>
+          </div>
         </div>
 
         {/* System Architecture */}
         <div className="grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] items-stretch">
-          <div className="glass rounded-3xl p-5 sm:p-6 bg-white/80 dark:bg-slate-900/90 border border-white/60 dark:border-slate-800/80">
+          <div>
             <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-50 mb-2">
               System Architecture
             </h2>
@@ -297,51 +293,6 @@ export default function ProjectDetails() {
             </div>
           </div>
 
-          {/* Code breakdown */}
-          <div className="glass rounded-3xl p-5 sm:p-6 bg-slate-900/95 text-slate-100 border border-slate-800/80 space-y-3">
-            <h2 className="text-base sm:text-lg font-semibold">Code Breakdown</h2>
-            <p className="text-xs sm:text-sm text-slate-300">
-              One core pattern in this project is a hard separation between orchestration (I/O, HTTP, background tasks)
-              and pure business logic or retrieval pipelines.
-            </p>
-
-            <pre className="text-[10px] sm:text-[11px] leading-relaxed bg-slate-950/70 rounded-2xl p-3 overflow-x-auto">
-              <code>{`// orchestrator: thin I/O & wiring
-async function handleRequest(req) {
-  const dto = validate(req.body);
-  const context = buildContext(req);
-  return executeUseCase(dto, context);
-}
-
-// use case: pure business logic
-function executeUseCase(dto, { aiClient, db }) {
-  const snapshot = db.fetch(dto.projectId);
-  const prediction = aiClient.score(snapshot);
-  return shapeResponse({ snapshot, prediction });
-}`}</code>
-            </pre>
-            <p className="mt-1 text-[11px] sm:text-xs text-slate-400">
-              For the exam platform, this means the FastAPI layer stays thin while an AI extraction engine converts raw
-              PDFs into structured JSON. For the complaint intelligence system, the orchestrator delegates to a
-              retrieval-first RAG pipeline that guarantees every answer is grounded in specific complaint IDs.
-            </p>
-
-            {project.techDetails && (
-              <div className="pt-2 border-t border-slate-800/80 mt-2 space-y-1.5">
-                <h3 className="text-[11px] font-semibold tracking-[0.18em] uppercase text-slate-400">
-                  Tech Stack Highlights
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-[11px] sm:text-xs">
-                  {Object.entries(project.techDetails).map(([group, items]) => (
-                    <div key={group} className="flex flex-col gap-0.5">
-                      <span className="font-semibold text-slate-200">{group}</span>
-                      <span className="text-slate-400">{items.join(', ')}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       </section>
     </motion.div>
