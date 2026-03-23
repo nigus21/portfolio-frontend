@@ -82,7 +82,7 @@ const chatEndpoint =
        
       const contentType = response.headers.get('content-type') || '';
       if (!response.ok) {
-        throw new Error(`Backend error (${response.status})`);
+        throw new Error(`Please Try again latter. (${response.status})`);
       }
 
       if (contentType.includes('application/json')) {
