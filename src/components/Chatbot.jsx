@@ -88,6 +88,7 @@ const chatEndpoint =
       if (contentType.includes('application/json')) {
         const data = await response.json();
         setMessages((prev) => [...prev, { role: 'assistant', text: data.response }]);
+          console.log("FULL RESPONSE:", data);
       } else {
         const text = await response.text();
         setMessages((prev) => [
@@ -113,7 +114,7 @@ const chatEndpoint =
     }
   };
 
-  console.log("FULL RESPONSE:", data);
+
   
   const handleQuickQuestion = (q) => {
     setInput(q);
