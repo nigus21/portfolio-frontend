@@ -58,6 +58,8 @@ const chatEndpoint =
     setMessages((prev) => [...prev, { role: 'user', text: userMessage }]);
     setIsLoading(true);
 
+     
+    
     try {
       if (!chatEndpoint) {
         setMessages((prev) => [
@@ -77,6 +79,7 @@ const chatEndpoint =
         redirect: 'manual',
       });
 
+       
       const contentType = response.headers.get('content-type') || '';
       if (!response.ok) {
         throw new Error(`Backend error (${response.status})`);
@@ -110,6 +113,8 @@ const chatEndpoint =
     }
   };
 
+  console.log("FULL RESPONSE:", data);
+  
   const handleQuickQuestion = (q) => {
     setInput(q);
   };
